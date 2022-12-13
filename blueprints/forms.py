@@ -19,6 +19,8 @@ class RegisterFrom(wtforms.Form):
             min=6, max=20, message="The length of password has to be between 6 to 20")]
     )
     password_confirm = wtforms.StringField(validators=[EqualTo("password")])
+    username = wtforms.StringField(
+        validators=[Length(min=3, max=20, message="The format of username is wrong")])
 
     # validate if the email has been used (already in the database)
     def validate_email(self, field):
