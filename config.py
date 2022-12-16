@@ -14,5 +14,8 @@ MAIL_SERVER = "smtp.qq.com"
 MAIL_USE_SSL = True
 MAIL_PORT = 465
 MAIL_USERNAME = "313312849@qq.com"
-MAIL_PASSWORD = "imuilbqtrbyrcbba"
+MAIL_PASSWORD = "qxxeynudmezicagb"
 MAIL_DEFAULT_SENDER = "313312849@qq.com"
+
+# secret key for session
+SECRET_KEY = "youkijiudai"

@@ -39,3 +39,25 @@ class RegisterFrom(wtforms.Form):
             raise wtforms.ValidationError(
                 message="the email address or the captcha is wrong")
         # TODO: Delete captcha_model
+
+
+class LoginForm(wtforms.Form):
+    # validate the email and password
+    email = wtforms.StringField(
+        validators=[Email(message="The format of email is wrong")])
+    password = wtforms.StringField(
+        validators=[Length(
+            min=6, max=20, message="The length of password has to be between 6 to 20")]
+    )
+
+
+class QuestionForm(wtforms.Form):
+    title = wtforms.StringField(
+        validators=[Length(
+            min=6, max=200, message="The length of title is wrong")]
+    )
+    content = wtforms.StringField(
+        validators=[Length(
+            min=3, message="The content format is wrong")]
+    )
+    

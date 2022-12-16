@@ -25,7 +25,7 @@
                         <a class="nav-link" href="/">Main Page <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Post A Question</a>
+                        <a class="nav-link" href="{{ url_for('qa.public_question') }}">Post A Question</a>
                     </li>
                     <li class="nav-item ml-2">
                         <form class="form-inline my-2 my-lg-0" method="GET" action="#">
@@ -35,12 +35,21 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav">
+                    {% if user %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Login</a>
+                        <span class="nav-link">{{user.username}}</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Sign up</a>
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
                     </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.register') }}">Sign up</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

@@ -1,31 +1,48 @@
-from .forms import RegisterFrom
+from .forms import RegisterFrom, LoginForm
 from random import random
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, session
 from extensions import mail, db
 from flask_mail import Message
-from flask import request, jsonify, redirect
+from flask import request, jsonify, redirect, url_for
 import string
 import random
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from models import EmailCaptchaModel, UserModel
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
-@bp.route("/login")
+@bp.route("/login", methods=['GET', 'POST'])
 def login():
-    return "this is the main page"
+    if request.method == 'GET':
+        return render_template("login.html")
+    else:
+        form = LoginForm(request.form)
+        if form.validate():
+            email = form.email.data
+            password = form.password.data
+            user = UserModel.query.filter_by(email=email).first()
+            if not user:
+                return redirect(url_for("auth.login"))
+            if check_password_hash(user.password, password):
+                # The data in the session is stored on the cookies
+                # and signed by the server cryptographically.
+                session['user_id'] = user.id
+                return redirect("/")
+            else:
+                return redirect(url_for("auth.login"))
+        else:
+            return redirect(url_for("auth.login"))
 
 
 @bp.route("/register", methods=['GET', 'POST'])
 def register():
-
     if request.method == 'GET':
         return render_template("register.html")
     else:
         # verifiy the verification code matched with the input
         form = RegisterFrom(request.form)
-        if form.validate() == True:
+        if form.validate():
             email = form.email.data
             username = form.username.data
             password = form.password.data
@@ -35,9 +52,16 @@ def register():
             db.session.add(user)
             db.session.commit()
             # after sign up successfully, redirect the the login page
-            return redirect("/auth/login")
+            return redirect(url_for("auth.login"))
         else:
-            return redirect("/auth/register")
+            return redirect(url_for("auth.register"))
+
+
+@bp.route("/logout")
+# logout, clear the info in cookie
+def logout():
+    session.clear()
+    return redirect("/")
 
 
 # This method is letting clients to receive captcha
