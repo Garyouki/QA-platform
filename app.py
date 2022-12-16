@@ -22,7 +22,7 @@ app.register_blueprint(qa_bp)
 app.register_blueprint(auth_bp)
 
 
-@app.before_first_request
+@app.before_request
 def my_before_request():
     # store the user_id
     user_id = session.get("user_id")
