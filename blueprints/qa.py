@@ -16,6 +16,7 @@ def index():
 
 
 @bp.route("/qa/public", methods=['GET', 'POST'])
+# add decorator so that the user should log in first
 @login_required
 def public_question():
 
@@ -33,3 +34,9 @@ def public_question():
             return redirect("/")
         else:
             return redirect(url_for("qa.public_question"))
+
+
+@bp.route("/qa/detail/<qa_id>")
+def qa_detail(qa_id):
+    question = QuestionModel.query.get(qa_id)
+    return render_template("detail.html", question=question)
