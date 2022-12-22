@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, g, redirect, url_for
 from extensions import db
 from models import QuestionModel
-from .forms import QuestionForm
+from .forms import QuestionForm, AnswerForm
 from decorators import login_required
 
 bp = Blueprint("qa", __name__, url_prefix="/")
@@ -40,3 +40,19 @@ def public_question():
 def qa_detail(qa_id):
     question = QuestionModel.query.get(qa_id)
     return render_template("detail.html", question=question)
+
+
+@bp.route("/answer/public", methods=['POST'])
+@login_required
+def public_answer():
+    form = AnswerForm(request.form)
+    if form.validate():
+        content = form.content.data
+        question_id = form.question_id.data
+        answer = AnswerForm(
+            content=content, question_id=question_id, author_id=g.user.id)
+        db.session.add(answer)
+        db.session.commit()
+        return redirect(url_for("qa_detail", question_id=question_id()))
+    else:
+        return redirect(url_for("qa_detail", question_id=request.form.get("question_id")))

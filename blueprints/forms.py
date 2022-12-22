@@ -1,7 +1,7 @@
 from email import message
 from tarfile import LENGTH_NAME
 import wtforms
-from wtforms.validators import Email, Length, EqualTo
+from wtforms.validators import Email, Length, EqualTo, InputRequired
 from models import UserModel, EmailCaptchaModel
 # The validator to verify if your email is valid
 
@@ -59,4 +59,14 @@ class QuestionForm(wtforms.Form):
     content = wtforms.StringField(
         validators=[Length(
             min=3, message="The content format is wrong")]
+    )
+
+
+class AnswerForm(wtforms.Form):
+    content = wtforms.StringField(
+        validators=[Length(
+            min=3, message="The content format is wrong")]
+    )
+    question_id = wtforms.IntegerField(
+        validators=[InputRequired(message="input question id")]
     )
