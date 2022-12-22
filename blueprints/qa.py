@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, g, redirect, url_for
 from extensions import db
-from models import QuestionModel
+from models import QuestionModel, AnswerModel
 from .forms import QuestionForm, AnswerForm
 from decorators import login_required
 
@@ -49,10 +49,19 @@ def public_answer():
     if form.validate():
         content = form.content.data
         question_id = form.question_id.data
-        answer = AnswerForm(
+        answer = AnswerModel(
             content=content, question_id=question_id, author_id=g.user.id)
         db.session.add(answer)
         db.session.commit()
-        return redirect(url_for("qa_detail", question_id=question_id()))
+        return redirect(url_for("qa.qa_detail", qa_id=question_id))
     else:
-        return redirect(url_for("qa_detail", question_id=request.form.get("question_id")))
+        return redirect(url_for("qa.qa_detail", qa_id=request.form.get("question_id")))
+
+
+@bp.route("/search")
+def search():
+    arg_q = request.args.get("q")
+    # query the questions include target q
+    questions = QuestionModel.query.filter(
+        QuestionModel.title.contains(arg_q)).all()
+    return render_template("index.html", questions=questions)
