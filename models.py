@@ -4,6 +4,7 @@ from datetime import datetime
 
 
 class UserModel(db.Model):
+    """ORM model mapping user to database, create columns"""
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(100), nullable=False)
@@ -13,6 +14,7 @@ class UserModel(db.Model):
 
 
 class EmailCaptchaModel(db.Model):
+    """ORM model mapping email verification code to database, create columns"""
     __tablename__ = "email_verification_code"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(100), nullable=False)
@@ -20,6 +22,7 @@ class EmailCaptchaModel(db.Model):
 
 
 class QuestionModel(db.Model):
+    """ORM model mapping questions to database, create columns"""
     __tablename__ = "the_question"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100), nullable=False)

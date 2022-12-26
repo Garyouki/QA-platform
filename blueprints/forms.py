@@ -52,6 +52,7 @@ class LoginForm(wtforms.Form):
 
 
 class QuestionForm(wtforms.Form):
+    # validate the questions
     title = wtforms.StringField(
         validators=[Length(
             min=3, max=200, message="The length of title is wrong")]
@@ -63,6 +64,7 @@ class QuestionForm(wtforms.Form):
 
 
 class AnswerForm(wtforms.Form):
+    # validate the answers
     content = wtforms.StringField(
         validators=[Length(
             min=3, message="The content format is wrong")]

@@ -3,7 +3,7 @@ from flask import g, redirect, url_for
 
 
 def login_required(func):
-    # keep the function information
+    """keep the function information"""
     @wraps(func)
     def inner_function(*args, **kwargs):
         if g.user:
